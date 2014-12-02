@@ -25,5 +25,28 @@ describe('Crawler test suite', function () {
 			});
 		});
 
+		describe ('should correctly return url', function() {
+
+			it ('with https', function(done){
+				var crawler = new Crawler('', {});
+
+				crawler.cleanupUrl('https://foo.de/index.html', function(err,url) {
+					(err === null).should.be.true;
+					url.should.equal('https://foo.de/index.html');
+					done();
+				});			
+			});
+
+			it ('with http', function(done){
+				var crawler = new Crawler('', {});
+
+				crawler.cleanupUrl('http://foo.de/index.html', function(err,url) {
+					(err === null).should.be.true;
+					url.should.equal('http://foo.de/index.html');
+					done();
+				});			
+			});
+
+		});
 	});
 });
