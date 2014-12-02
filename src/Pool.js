@@ -36,7 +36,7 @@ Pool.prototype.addCrawler = function (url) {
 
 	_this.addToSeen(url, function () {
 		_this.currentCrawlers++;
-		new _this.Crawler(url, crawlerApi);
+		new _this.Crawler(url, crawlerApi).crawl();
 	});
 };
 

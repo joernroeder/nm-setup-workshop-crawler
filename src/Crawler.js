@@ -4,8 +4,6 @@ var cheerio = require('cheerio');
 var Crawler = function (url, api) {
 	this.url = url;
 	this.api = api;
-
-	this.crawl();
 };
 
 Crawler.prototype.crawl = function () {
