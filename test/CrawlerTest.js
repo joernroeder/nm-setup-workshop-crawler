@@ -25,5 +25,15 @@ describe('Crawler test suite', function () {
 			});
 		});
 
+		it ('should correctly remove the hash', function (done) {
+			var crawler = new Crawler('', {});
+			crawler.cleanupUrl('http://www.spiegel.de/#/foob', function (err, url) {
+				(err === null).should.be.true;
+				url.should.equal('http://www.spiegel.de/');
+
+				done();
+			});
+
+		});
 	});
 });
