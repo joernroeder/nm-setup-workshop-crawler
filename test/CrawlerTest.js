@@ -44,7 +44,17 @@ describe('Crawler test suite', function () {
 					(err === null).should.be.true;
 					url.should.equal('http://foo.de/index.html');
 					done();
-				});			
+				});		
+			});
+		});
+					
+		it ('should correctly remove the hash', function (done) {
+			var crawler = new Crawler('', {});
+			crawler.cleanupUrl('http://www.spiegel.de/#/foob', function (err, url) {
+				(err === null).should.be.true;
+				url.should.equal('http://www.spiegel.de/');
+
+				done();
 			});
 
 		});
