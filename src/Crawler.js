@@ -24,7 +24,7 @@ Crawler.prototype.crawl = function () {
 
 		var $ = cheerio.load(body);
 		_this.findNewLinks($);
-		_this.analyseBody($);
+		_this.analyseBody(body);
 	});
 };
 
@@ -41,7 +41,8 @@ Crawler.prototype.cleanupUrl = function (url, callback) {
 	}
 };
 
-Crawler.prototype.analyseBody = function ($) {
+Crawler.prototype.analyseBody = function (body) {
+	var $ = cheerio.load(body);
 	var title = $('h1').text();
 
 	if (!title) {
