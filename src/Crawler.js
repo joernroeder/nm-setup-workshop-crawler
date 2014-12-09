@@ -52,8 +52,9 @@ Crawler.prototype.analyseBody = function (body) {
 	this.api.saveItem(this.url, title);
 };
 
-Crawler.prototype.findNewLinks = function ($) {
+Crawler.prototype.findNewLinks = function (body) {
 	var _this = this;
+	var $ = cheerio.load(body);
 	var $a = $('a');
 		
 	$a.map(function (i, el) {

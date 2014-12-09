@@ -85,5 +85,51 @@ describe('Crawler test suite', function () {
 			saveItem.called.should.be.false;
 		});
 	});
+
+	describe ('#findNewLinks', function () {
+
+		it ('should correctly add two links to the queue', function () {
+			var addToQueue = sinon.spy();
+			var crawler = new Crawler('http://foo.bar', {
+				addToQueue: addToQueue
+			});
+
+			var links = '<a href="http://foo.bar">Test1</a><a href="http://bar.foo">Test2</a>';
+
+			crawler.findNewLinks(links);
+
+			addToQueue.calledTwice.should.be.true;
+			addToQueue.getCall(0).calledWith('http://foo.bar');
+			addToQueue.getCall(1).calledWith('http://bar.foo');
+		});
+
+		it ('should not add an empty link to the queue', function () {
+			var addToQueue = sinon.spy();
+			var crawler = new Crawler('http://foo.bar', {
+				addToQueue: addToQueue
+			});
+
+			var links = '<a href="">Test1</a>';
+
+			crawler.findNewLinks(links);
+
+			addToQueue.called.should.be.false;
+		});
+
+		it ('should not add a link to the queue if the #cleanupUrl function returned an error', function () {
+			Crawler.prototype.cleanupUrl = function (url, callback) {
+				return callback(new Error(), null);
+			};
+
+			var addToQueue = sinon.spy();
+			var crawler = new Crawler('http://foo.bar', {
+				addToQueue: addToQueue
+			});
+
+			crawler.findNewLinks('<a href="invalidLink">Test</a>');
+
+			addToQueue.called.should.be.false;
+		});
+	});
 });
 
