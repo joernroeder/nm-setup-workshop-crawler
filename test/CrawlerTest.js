@@ -1,4 +1,5 @@
 var should = require('should');
+var sinon = require('sinon');
 
 var Crawler = require('../src/Crawler');
 
@@ -59,4 +60,30 @@ describe('Crawler test suite', function () {
 
 		});
 	});
+	
+	describe ('#analyseBody', function () {
+		it ('analyses body for contents of h1 elements', function () {
+			var saveItem = sinon.spy();
+			var crawler = new Crawler('http://foo.bar', {
+				saveItem: saveItem
+			});
+
+			crawler.analyseBody('<h1>Foo</h1>');
+
+			saveItem.calledOnce.should.be.true;
+			saveItem.calledWith('http://foo.bar', 'Foo');
+		});
+
+		it ('should not save an empty title', function () {
+			var saveItem = sinon.spy();
+			var crawler = new Crawler('http://foo.bar', {
+				saveItem: saveItem
+			});
+
+			crawler.analyseBody('<h1></h1>');
+
+			saveItem.called.should.be.false;
+		});
+	});
 });
+
