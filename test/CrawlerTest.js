@@ -131,5 +131,73 @@ describe('Crawler test suite', function () {
 			addToQueue.called.should.be.false;
 		});
 	});
+
+	describe ('#processResponse', function () {
+		it ('should call the onRequestFinishedCallback', function () {
+			var onRequestFinishedCallback = sinon.spy();
+
+			var crawler = new Crawler('http://foo.bar', {
+				onRequestFinishedCallback: onRequestFinishedCallback
+			});
+
+			crawler.processResponse(null, {}, null);
+			onRequestFinishedCallback.calledOnce.should.be.true;
+		});
+
+		it ('should return an error if the response status is not 200', function () {
+			var crawler = new Crawler('http://foo.bar', {
+				onRequestFinishedCallback: function () {}
+			});
+
+			var error = crawler.processResponse(null, {
+				statusCode: 404
+			}, null);
+
+			error.should.be.an.instanceOf(Error);
+			error.message.should.equal('response status code is not 200');
+		});
+
+		it ('should return an error if the content type is not text/html', function () {
+			var crawler = new Crawler('http://foo.bar', {
+				onRequestFinishedCallback: function () {}
+			});
+
+			var error = crawler.processResponse(null, {
+				statusCode: 200,
+				headers: {
+					'content-type': 'image/jpg'
+				}
+			}, null);
+
+			error.should.be.an.instanceOf(Error);
+			error.message.should.equal('response content type is not text/html');
+		});
+
+		it ('should pass the body to #findNewLinks and #analyseBody', function () {
+			var crawler = new Crawler('http://foo.bar', {
+				onRequestFinishedCallback: function () {}
+			});
+
+			Crawler.prototype.findNewLinks = sinon.spy();
+			Crawler.prototype.analyseBody = sinon.spy();
+
+			var body = '<html><head><title>Test</title></head><body>Test</body></html>';
+
+			var error = crawler.processResponse(null, {
+				statusCode: 200,
+				headers: {
+					'content-type': 'text/html'
+				}
+			}, body);
+
+			crawler.findNewLinks.calledOnce.should.be.true;
+			crawler.findNewLinks.calledWith(body);
+
+			crawler.analyseBody.calledOnce.should.be.true;
+			crawler.analyseBody.calledWith(body);
+			(error === undefined).should.be.true;
+		});
+
+	});
 });
 

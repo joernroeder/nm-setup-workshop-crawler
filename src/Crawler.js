@@ -10,22 +10,25 @@ Crawler.prototype.crawl = function () {
 	var _this = this;
 
 	request(this.url, function (err, response, body) {
-		// start new crawler
-		_this.api.onRequestFinishedCallback();
-		
-		if (err || response.statusCode != 200) {
-			return;
-		}
-		
-		var contentType = response.headers['content-type'];
-		if (!contentType || contentType.indexOf('text/html') === -1) {
-			return;
-		}
-
-		var $ = cheerio.load(body);
-		_this.findNewLinks($);
-		_this.analyseBody(body);
+		_this.processResponse(err, response, body);
 	});
+};
+
+Crawler.prototype.processResponse = function (err, response, body) {
+	// start new crawler
+	this.api.onRequestFinishedCallback();
+	
+	if (err || response.statusCode != 200) {
+		return new Error('response status code is not 200');
+	}
+	
+	var contentType = response.headers['content-type'];
+	if (!contentType || contentType.indexOf('text/html') === -1) {
+		return new Error('response content type is not text/html');
+	}
+
+	this.findNewLinks(body);
+	this.analyseBody(body);
 };
 
 Crawler.prototype.cleanupUrl = function (url, callback) {
