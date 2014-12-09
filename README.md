@@ -5,7 +5,6 @@ nm-setup-workshop-crawler
 ## setup
 
 Setup database and run program
-hallo
 
 ```
 $ cd working-dir/src
@@ -29,8 +28,4 @@ Install dependencies
 ```
 $ cd working-dir
 $ npm install
-```
-
-```
-// mike testing
 ```
