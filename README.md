@@ -5,6 +5,7 @@ nm-setup-workshop-crawler
 ## setup
 
 Setup database and run program
+hallo
 
 ```
 $ cd working-dir/src
