@@ -21,6 +21,15 @@ $ cd working-dir
 $ mocha
 ```
 
+## coverage
+
+Create coverage report
+
+```
+$ cd working-dir
+$ mocha --reporter html-cov > coverage.html
+```
+
 ## post pull
 
 Install dependencies
